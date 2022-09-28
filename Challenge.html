@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Encriptador</title>
+</head>
+<body>
+  <embed class="alura" src="Vector.png"></embed>
+<section id="main-section">
+      <div id="input-section">
+        <textarea
+          id="input"
+          placeholder="Ingrese el texto aqui"
+          rows="10 "
+          cols="50"
+        ></textarea>
+        <div id="actions">
+          <div>
+            <p>
+              <span id="icon">
+                <i class="fas fa-exclamation-circle"></i>
+                <embed src="signo.png"></embed>
+              </span>Solo letras minusculas y sin acento
+            </p>
+            <div id="action-buttons">
+              <button id="encrypt" class="action-button">Encriptar</button>
+              <button id="copy" class="action-button">Copiar</button>
+              <button id="decrypt" class="action-button">Desencriptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="message">
+        <h1>Ningún mensaje fue encontrado</h1>
+        <p id="show-message">Ingresa el texto que desees encriptar o desencriptar.</p>
+      </div>
+    </section>
+    
+  
+    <div id="warningModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h2>¡Advertencia!</h2>
+        </div>
+        <div class="modal-body">
+          <p id="modal-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="close-modal-button">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="successModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <i class="fas fa-check-circle"></i>
+          <h2>¡Advertencia!</h2>
+        </div>
+        <div class="modal-body">
+          <p id="success-modal-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="close-button">Cerrar</button>
+        </div>
+      </div>
+    </div>
+    <script>
+        const input = document.getElementById("input");
+const encrypt = document.getElementById("encrypt");
+const decrypt = document.getElementById("decrypt");
+const showMessage = document.getElementById("message");
+const closeModalButton = document.getElementById("close-modal-button");
+const warningModal = document.getElementById("warningModal");
+const warningModalMessage = document.getElementById("modal-message");
+const successModal = document.getElementById("successModal");
+const closeSuccessModal = document.getElementById("close-modal");
+const successModalMessage = document.getElementById("success-modal-message");
+const copy = document.getElementById("copy");
+
+function encryptMessage(str) {
+  const string = str.toLowerCase().split("");
+  const code = ["ai", "enter", "imes", "ober", "ufat"];
+  const encryptMessage = [];
+
+  for (let i = 0; i < string.length; i++) {
+    if (string[i] === "a") {
+      encryptMessage.push(code[0]);
+    } else if (string[i] === "e") {
+      encryptMessage.push(code[1]);
+    } else if (string[i] === "i") {
+      encryptMessage.push(code[2]);
+    } else if (string[i] === "o") {
+      encryptMessage.push(code[3]);
+    } else if (string[i] === "u") {
+      encryptMessage.push(code[4]);
+    } else {
+      encryptMessage.push(string[i]);
+    }
+  }
+  return encryptMessage.join("");
+}
+
+function decryptMessage(str) {
+  const regex = /ai|enter|imes|ober|ufat/gi;
+}
+
+function invalidInput(str) {
+  const specialChars = /[`áéíóú´!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  return specialChars.test(str);
+}
+
+encrypt.addEventListener("click", function () {
+  if (input.value.length <= 0) {
+    warningModalMessage.innerHTML =
+      "No ha ingresado ningún mensaje para que se encriptado, por favor ingresar el mensaje.";
+    warningModal.style.display = "block";
+    return;
+  }
+
+  if (invalidInput(input.value)) {
+    warningModalMessage.innerHTML =
+      "No se aceptan carácteres especiales, ni tildes. Por favor intente de nuevo.";
+    warningModal.style.display = "block";
+    return;
+  } else {
+    showMessage.style.display = "block";
+    showMessage.innerHTML = `<h2>${encryptMessage(input.value)}</h2>`;
+    input.value = "";
+  }
+});
+
+decrypt.addEventListener("click", function () {
+  let string = input.value;
+  const regex = {
+    ai: "a",
+    enter: "e",
+    imes: "i",
+    ober: "o",
+    ufat: "u",
+  };
+
+  string = string.replace(/ai|enter|imes|ober|ufat/gi, function (matched) {
+    return regex[matched];
+  });
+
+  showMessage.style.display = "block";
+  showMessage.innerHTML = `<h2>${string}</h2>`;
+  input.value = "";
+});
+
+copy.addEventListener("click", function () {
+  navigator.clipboard.writeText(showMessage.innerText);
+  successModalMessage.innerHTML = "El mensaje se ha copiado de manera exitosa";
+  successModal.style.display = "block";
+});
+
+closeModalButton.addEventListener("click", function () {
+  warningModal.style.display = "none";
+});
+
+warningModal.addEventListener("click", function () {
+  warningModal.style.display = "none";
+});
+
+successModal.addEventListener("click", function () {
+  successModal.style.display = "none";
+});
+
+    </script>
+
+</body>
+</html>
